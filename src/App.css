@@ -1,0 +1,22 @@
+.app {
+  display:  flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  margin: 50px;
+}
+
+.error {
+  border: 1px solid red;
+}
+
+.error-message {
+  color: red;
+}
+
+.active-filter {
+  background: #75e3f3;
+}
+
+.is-done {
+ opacity: .5;
+}
