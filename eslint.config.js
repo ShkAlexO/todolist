@@ -19,5 +19,11 @@ export default tseslint.config([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      // MY-NOTE-1
+      // Разрешаем использование `debugger` для локальной отладки.
+      // В продакшн-версии это правило лучше оставить включённым.
+      'no-debugger': 'off', // ❌ отключаем правило
+    },
   },
 ])
