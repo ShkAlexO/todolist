@@ -2,6 +2,7 @@ import './App.css'
 import {Todolist} from "./Todolist";
 import {useState} from "react";
 import {v1} from "uuid";
+import {AddItemForm} from "./AddItemForm";
 
 export type FilterValuesType = 'all' | 'active' | 'completed'
 
@@ -16,6 +17,8 @@ type TodolistType = {
   filter: FilterValuesType
 }
 
+export type TasksState = Record<string, TaskType[]>
+
 function App() {
   const todolistId1 = v1()
   const todolistId2 = v1()
@@ -25,7 +28,7 @@ function App() {
     {id: todolistId2, title: 'What to learn 2', filter: 'completed'},
   ])
 
-  const [tasksObj, setTasksObj] = useState({
+  const [tasksObj, setTasksObj] = useState<TasksState>({
     [todolistId1]: [
       {id: v1(), title: 'HTML&CSS', isDone: true},
       {id: v1(), title: 'JS', isDone: true},
@@ -38,8 +41,15 @@ function App() {
     ]
   })
 
-  const removeTodolist = (todolistId:string) => {
-    const filteredTodolists  = todolists.filter(todolist => todolist.id !== todolistId)
+  const addTodolist = (title: string) => {
+    const todolistId = v1()
+    const newTodolist: TodolistType = {id: todolistId, title, filter: 'active'}
+    setTodolists([newTodolist, ...todolists])
+    setTasksObj({...tasksObj, [todolistId]: []})
+  }
+
+  const removeTodolist = (todolistId: string) => {
+    const filteredTodolists = todolists.filter(todolist => todolist.id !== todolistId)
     setTodolists([...filteredTodolists])
     delete tasksObj[todolistId]
     setTasksObj({...tasksObj})
@@ -47,16 +57,14 @@ function App() {
 
   const addTask = (id: string, title: string) => {
     const tasks = tasksObj[id]
-    const newTask = {id: v1(), title: title, isDone: false}
-    const newTasks = [newTask, ...tasks]
+    const newTasks = [{id: v1(), title: title, isDone: false}, ...tasks]
     tasksObj[id] = newTasks
     setTasksObj({...tasksObj})
   }
 
   const removeTask = (id: string, taskId: string) => {
     const tasks = tasksObj[id]
-    const filteredTasks = tasks.filter(task => task.id !== taskId)
-    tasksObj[id] = filteredTasks
+    tasksObj[id] = tasks.filter(task => task.id !== taskId)
     setTasksObj({...tasksObj})
   }
 
@@ -79,6 +87,7 @@ function App() {
 
   return (
     <div className="app">
+      <AddItemForm addItem={addTodolist}/>
       <div>
         {todolists.map(todolist => {
           let tasksForTodolist = tasksObj[todolist.id]
