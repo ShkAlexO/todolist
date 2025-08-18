@@ -1,3 +1,4 @@
+import Input from "@mui/material/Input";
 import {type ChangeEvent, type KeyboardEvent, useState} from "react";
 
 export type EditableSpanPropsType = {
@@ -26,8 +27,7 @@ export const EditableSpan = ({title, onChange}: EditableSpanPropsType) => {
 
   return (
     editMode ?
-      <input
-        type="text"
+      <Input
         value={value}
         onChange={onChangeTitleHandler}
         onKeyDown={onKeyPressHandler}

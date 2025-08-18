@@ -1,11 +1,13 @@
-import {Button} from "./Button";
+import IconButton from "@mui/material/IconButton";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import TextField from "@mui/material/TextField";
 import {type ChangeEvent, type KeyboardEvent, useState} from "react";
 
 export type AddItemFormPropsType = {
-  addItem: (title: string)=>void;
+  addItem: (title: string) => void;
 }
 
-export const AddItemForm = ({ addItem}:AddItemFormPropsType) => {
+export const AddItemForm = ({addItem}: AddItemFormPropsType) => {
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const [error, setError] = useState<string | null>(null)
 
@@ -24,25 +26,36 @@ export const AddItemForm = ({ addItem}:AddItemFormPropsType) => {
   }
 
   const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && newTaskTitle.trim().length !== 0) {
       addItem(newTaskTitle)
       setNewTaskTitle('')
+    }
+    else {
+      setError('Title is required')
     }
   }
 
   return (
     <div>
-      <input
+      <TextField
+        size={'small'}
+        label="Title Todolist"
+        variant="outlined"
         value={newTaskTitle}
         onKeyDown={onKeyPressHandler}
         onChange={onNewTitleChangeHandler}
-        className={error ? 'error' : ''}
+        helperText={error}
+        error={!!error}
+        sx={{marginRight: '5px' }}
       />
-      <Button
-        title={'+'}
+
+      <IconButton
+        size={"medium"}
+        color={'primary'}
         onClick={addTaskHandler}
-      />
-      {error && <p className={error ? 'error-message' : ''}>{error}</p>}
+      >
+        <AddCircleOutlineIcon fontSize={'medium'}/>
+      </IconButton>
     </div>
   )
 }
