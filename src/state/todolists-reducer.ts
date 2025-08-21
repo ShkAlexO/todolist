@@ -41,10 +41,16 @@ export type AddTodolistActionType = {
   type: 'ADD-TODOLIST'
   title: string
 }
+export const addTodolistAC = (title: string): AddTodolistActionType => {
+  return {type: 'ADD-TODOLIST', title}
+}
 
 export type RemoveTodolistActionType = {
   type: 'REMOVE-TODOLIST'
   todolistId: string
+}
+export const removeTodolistAC = (todolistId: string): RemoveTodolistActionType => {
+  return {type: 'REMOVE-TODOLIST', todolistId}
 }
 
 export type ChangeTodolistTitleActionType = {
@@ -52,9 +58,15 @@ export type ChangeTodolistTitleActionType = {
   todolistId: string
   title: string
 }
+export const changeTodolistTitleAC = (todolistId: string, title: string): ChangeTodolistTitleActionType => {
+  return {type: 'CHANGE-TODOLIST-TITLE', todolistId, title}
+}
 
 export type ChangeTodolistFilterActionType = {
   type: 'CHANGE-TODOLIST-FILTER'
   todolistId: string
   filter: FilterValuesType
+}
+export const changeTodolistFilterAC = (todolistId: string, filter: FilterValuesType): ChangeTodolistFilterActionType => {
+  return {type: 'CHANGE-TODOLIST-FILTER', todolistId, filter}
 }
