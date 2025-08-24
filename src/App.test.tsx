@@ -6,7 +6,8 @@ import '@testing-library/jest-dom';
 test('renders learn react link', () => {
   const {getByText} = render(<App/>);
   //MY-NOTE-3 , MY-NOTE-4
-  const linkElement = getByText(/learn react link/i);
+  // const linkElement = getByText(/learn react link/i);
+  const linkElement = getByText(/login/i);
   //MY-NOTE-5 , MY-NOTE-6
   expect(linkElement).toBeInTheDocument();
 })
