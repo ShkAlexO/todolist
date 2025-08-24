@@ -7,7 +7,7 @@ export const todolistsReducer = (state: StateType, action: ActionType): StateTyp
       return [
         ...state,
         {
-          id: v1(), //так делать не правильно, но это временно
+          id: action.todolistId,
           title: action.title,
           filter: 'all'
         }
@@ -40,9 +40,10 @@ type ActionType =
 export type AddTodolistActionType = {
   type: 'ADD-TODOLIST'
   title: string
+  todolistId: string
 }
 export const addTodolistAC = (title: string): AddTodolistActionType => {
-  return {type: 'ADD-TODOLIST', title}
+  return {type: 'ADD-TODOLIST', title, todolistId: v1()}
 }
 
 export type RemoveTodolistActionType = {
