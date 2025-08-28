@@ -1,13 +1,19 @@
 import App from "./App";
 import {render} from "@testing-library/react";
 import '@testing-library/jest-dom';
+import {Provider} from "react-redux";
+import {store} from "./state/store";
 
 //MY-NOTE-2
 test('renders learn react link', () => {
-  const {getByText} = render(<App/>);
+  const {getByText} = render(
+    <Provider store={store}>
+      <App/>
+    </Provider>
+  );
   //MY-NOTE-3 , MY-NOTE-4
   // const linkElement = getByText(/learn react link/i);
-  const linkElement = getByText(/login/i);
+  const linkElement = getByText(/Login/i);
   //MY-NOTE-5 , MY-NOTE-6
   expect(linkElement).toBeInTheDocument();
 })
