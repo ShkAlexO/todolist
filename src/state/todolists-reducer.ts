@@ -1,7 +1,15 @@
 import type {FilterValuesType, TodolistType} from "../App";
 import {v1} from "uuid";
 
-export const todolistsReducer = (state: StateType, action: ActionType): StateType => {
+export const todolistId1 = v1()
+export const todolistId2 = v1()
+
+export const initialTodolistsState: TodolistsStateType = [
+  {id: todolistId1, title: 'What to learn 1', filter: 'active'},
+  {id: todolistId2, title: 'What to learn 2', filter: 'completed'},
+]
+
+export const todolistsReducer = (state: TodolistsStateType = initialTodolistsState, action: ActionType): TodolistsStateType => {
   switch (action.type) {
     case 'ADD-TODOLIST':
       return [
@@ -25,11 +33,11 @@ export const todolistsReducer = (state: StateType, action: ActionType): StateTyp
           ? {...todolist, filter: action.filter} : todolist
       })
     default:
-      throw new Error('Unknown action')
+      return  state;
   }
 }
 
-type StateType = Array<TodolistType>
+export type TodolistsStateType = Array<TodolistType>
 
 type ActionType =
   AddTodolistActionType |

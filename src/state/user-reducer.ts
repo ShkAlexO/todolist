@@ -27,6 +27,6 @@ export const userReducer = (state: StateType, action: ActionType): StateType => 
         name: action.newName
       }
     default:
-      throw new Error('Unknown action')
+      return  state;
   }
 }

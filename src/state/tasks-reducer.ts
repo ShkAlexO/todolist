@@ -1,8 +1,25 @@
 import type {TasksStateType} from "../App";
 import {v1} from "uuid";
-import type {AddTodolistActionType, RemoveTodolistActionType} from "./todolists-reducer";
+import {
+  type AddTodolistActionType,
+  type RemoveTodolistActionType,
+  todolistId1, todolistId2
+} from "./todolists-reducer";
 
-export const tasksReducer = (state: TasksStateType, action: ActionType): TasksStateType => {
+export const initialTasksState: TasksStateType = {
+  [todolistId1]: [
+    {id: v1(), title: 'HTML&CSS', isDone: true},
+    {id: v1(), title: 'JS', isDone: true},
+    {id: v1(), title: 'ReactJS', isDone: false}
+  ],
+  [todolistId2]: [
+    {id: v1(), title: '2HTML&CSS', isDone: true},
+    {id: v1(), title: '2JS', isDone: false},
+    {id: v1(), title: '2ReactJS', isDone: true}
+  ]
+}
+
+export const tasksReducer = (state: TasksStateType = initialTasksState, action: ActionType): TasksStateType => {
   switch (action.type) {
     case 'ADD-TODOLIST': {
       return {...state, [action.todolistId]: []}
@@ -24,33 +41,33 @@ export const tasksReducer = (state: TasksStateType, action: ActionType): TasksSt
     case 'REMOVE-TASK': {
       return {
         ...state,
-        [action.todolistId]: state[action.todolistId].filter(todolist => todolist.id !== action.taskId)
+        [action.todolistId]: state[action.todolistId].filter(task => task.id !== action.taskId)
       }
     }
     case 'CHANGE-TASK-STATUS': {
       return {
         ...state,
-        [action.todolistId]: state[action.todolistId].map(todolist => {
-          return todolist.id === action.taskId ? {
-            ...todolist,
+        [action.todolistId]: state[action.todolistId].map(task => {
+          return task.id === action.taskId ? {
+            ...task,
             isDone: action.taskStatus
-          } : todolist;
+          } : task;
         })
       }
     }
     case 'CHANGE-TASK-TITLE': {
       return {
         ...state,
-        [action.todolistId]: state[action.todolistId].map(todolist => {
-          return todolist.id === action.taskId ? {
-            ...todolist,
+        [action.todolistId]: state[action.todolistId].map(task => {
+          return task.id === action.taskId ? {
+            ...task,
             title: action.taskTitle
-          } : todolist;
+          } : task;
         })
       }
     }
     default:
-      throw new Error('Unknown action')
+      return state;
   }
 }
 
