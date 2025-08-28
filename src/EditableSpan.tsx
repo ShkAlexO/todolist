@@ -1,11 +1,11 @@
 import Input from "@mui/material/Input";
-import {type ChangeEvent, type KeyboardEvent, useState} from "react";
+import {type ChangeEvent, type KeyboardEvent, memo, useState} from "react";
 
 export type EditableSpanPropsType = {
   title: string
   onChange: (title: string) => void
 }
-export const EditableSpan = ({title, onChange}: EditableSpanPropsType) => {
+export const EditableSpan = memo(({title, onChange}: EditableSpanPropsType) => {
   const [editMode, setEditMode] = useState(false)
   const [value, setValue] = useState(title)
 
@@ -38,4 +38,4 @@ export const EditableSpan = ({title, onChange}: EditableSpanPropsType) => {
         {value}
       </span>
   )
-}
+})
