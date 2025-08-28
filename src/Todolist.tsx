@@ -4,12 +4,13 @@ import {EditableSpan} from "./EditableSpan";
 import IconButton from "@mui/material/IconButton";
 import Delete from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
+import {memo, useCallback} from "react";
+import {Task} from "./Task";
 
 type Props = {
   todolistId: string
   title: string
-  tasks: TaskType[]
+  tasksForThisTodolist: TaskType[]
   removeTodolist: (todolistId: string) => void
   addTask: (todolistId: string, title: string) => void
   removeTask: (todolistId: string, taskId: string) => void
@@ -20,11 +21,11 @@ type Props = {
   filter: FilterValuesType
 }
 
-export const Todolist = (
+export const Todolist = memo((
   {
     todolistId,
     title,
-    tasks,
+    tasksForThisTodolist,
     removeTodolist,
     addTask,
     removeTask,
@@ -34,13 +35,30 @@ export const Todolist = (
     changeTodolistFilter,
     filter
   }: Props) => {
-
-  const changeTodolistTitleHandler = (title: string) => {
+  const changeTodolistTitleHandler = useCallback((title: string) => {
     changeTodolistTitle(todolistId, title)
-  }
+  }, [changeTodolistTitle, todolistId])
 
-  const addTaskHandler = (title: string) => {
+  const addTaskHandler = useCallback((title: string) => {
     addTask(todolistId, title)
+  }, [addTask, todolistId])
+
+  const onAllClickHandler = useCallback(() => {
+    changeTodolistFilter(todolistId, 'all')
+  }, [changeTodolistFilter, todolistId])
+  const onActiveClickHandler = useCallback(() => {
+    changeTodolistFilter(todolistId, 'active')
+  }, [changeTodolistFilter, todolistId])
+  const onCompletedClickHandler = useCallback(() => {
+    changeTodolistFilter(todolistId, 'completed')
+  }, [changeTodolistFilter, todolistId])
+
+  let tasksForTodolist = tasksForThisTodolist
+  if (filter === 'active') {
+    tasksForTodolist = tasksForThisTodolist.filter(task => !task.isDone)
+  }
+  if (filter === 'completed') {
+    tasksForTodolist = tasksForThisTodolist.filter(task => task.isDone)
   }
 
   return (
@@ -56,49 +74,37 @@ export const Todolist = (
       </h3>
       <AddItemForm addItem={addTaskHandler}/>
 
-      {tasks.length === 0 ? (
+      {tasksForTodolist.length === 0 ? (
         <p>Тасок нет</p>
       ) : (
-        <ul>
-          {tasks.map(task => {
-            return (
-              <li key={task.id} className={task.isDone ? 'is-done' : ''}>
-                <Checkbox
-                  size={'small'}
-                  checked={task.isDone}
-                  onChange={(e) => changeTaskStatus(todolistId, task.id, e.currentTarget.checked)}
-                />
-
-                <EditableSpan
-                  title={task.title}
-                  onChange={(title: string) => changeTaskTitle(todolistId, task.id, title)}/>
-
-                <IconButton
-                  size={"small"}
-                  onClick={() => removeTask(todolistId, task.id)}
-                >
-                  <Delete fontSize={'small'}/>
-                </IconButton>
-              </li>
-            )
+        <div>
+          {tasksForTodolist.map(task => {
+            return <Task
+              key={task.id}
+              todolistId={todolistId}
+              task={task}
+              removeTask={removeTask}
+              changeTaskTitle={changeTaskTitle}
+              changeTaskStatus={changeTaskStatus}
+            />
           })}
-        </ul>
+        </div>
       )}
       <div>
         <Button
           variant={filter === 'all' ? 'contained' : 'outlined'}
-          onClick={() => changeTodolistFilter(todolistId, 'all')}
+          onClick={onAllClickHandler}
         >All</Button>
         <Button
           variant={filter === 'active' ? 'contained' : 'outlined'}
           sx={{margin: '0 5px'}}
-          onClick={() => changeTodolistFilter(todolistId, 'active')}
+          onClick={onActiveClickHandler}
         >Active</Button>
         <Button
           variant={filter === 'completed' ? 'contained' : 'outlined'}
-          onClick={() => changeTodolistFilter(todolistId, 'completed')}
+          onClick={onCompletedClickHandler}
         >Completed</Button>
       </div>
     </div>
   )
-}
+})
