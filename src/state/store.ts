@@ -8,13 +8,13 @@ const rootReducer = combineReducers({
 })
 
 // 1 вариант типизировать состояние всего state (вручную описать структуру состояния)
-// type AppRootState = {
+// type AppRootStateType = {
 //   todolists: Array<TodolistType>,
 //   tasks: TasksStateType,
 // }
 
 // 2 вариант  типизировать состояние всего state (автоматически вывести тип состояния через rootReducer)
-export type AppRootState = ReturnType<typeof rootReducer>;
+export type AppRootStateType = ReturnType<typeof rootReducer>;
 
 export const store = createStore(rootReducer)
 
